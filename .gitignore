@@ -12,6 +12,10 @@ desktop.ini
 /.vs
 
 ########### /CySoft ###########
-/CySoft/bin
-/CySoft/obj
 /CySoft/Properties/PublishProfiles
+
+########### /*/bin ###########
+/*/bin
+
+########### /*/obj ###########
+/*/obj

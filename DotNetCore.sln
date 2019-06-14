@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.645
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CySoft", "CySoft\CySoft.csproj", "{4CFF70B4-DB85-4118-B524-DCD4498930D1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CySoft", "CySoft\CySoft.csproj", "{4CFF70B4-DB85-4118-B524-DCD4498930D1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CySoft.Redis", "CySoft.Redis\CySoft.Redis.csproj", "{5CB3975B-9A25-441C-ACCD-B099C6CAFC2F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CySoft.Utility", "CySoft.Utility\CySoft.Utility.csproj", "{0EDFBF03-E329-4E8F-B384-211E2BD97EDD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{4CFF70B4-DB85-4118-B524-DCD4498930D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4CFF70B4-DB85-4118-B524-DCD4498930D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4CFF70B4-DB85-4118-B524-DCD4498930D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CB3975B-9A25-441C-ACCD-B099C6CAFC2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CB3975B-9A25-441C-ACCD-B099C6CAFC2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CB3975B-9A25-441C-ACCD-B099C6CAFC2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CB3975B-9A25-441C-ACCD-B099C6CAFC2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EDFBF03-E329-4E8F-B384-211E2BD97EDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EDFBF03-E329-4E8F-B384-211E2BD97EDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EDFBF03-E329-4E8F-B384-211E2BD97EDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EDFBF03-E329-4E8F-B384-211E2BD97EDD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
