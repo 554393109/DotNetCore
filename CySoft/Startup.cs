@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DotNetCore.CAP;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -22,9 +23,33 @@ namespace CySoft
 
         public IConfiguration Configuration { get; }
 
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<AppDbContext>();
+            //services.AddTransient<ISubscriberService, SubscriberService>();
+            services.AddCap(x => {
+                x.UseEntityFramework<AppDbContext>();
+                //x.UseDashboard();
+                //x.UseDiscovery(d => {
+                //    d.DiscoveryServerHostName = "localhost";
+                //    d.DiscoveryServerPort = 8500;
+                //    d.CurrentNodeHostName = "localhost";
+                //    d.CurrentNodePort = 5800;
+                //    d.NodeId = 1;
+                //    d.NodeName = "CAP No.1 Node";
+                //    d.MatchPath = "cap";
+                //});
+
+                x.UseRabbitMQ("192.168.1.140");
+                x.UseDashboard();
+                x.FailedRetryCount = 5;
+                x.FailedThresholdCallback = (type, name, content) => {
+                    Console.WriteLine($@"A message of type {type} failed after executing {x.FailedRetryCount} several times, requiring manual troubleshooting. Message name: {name}, message body: {content}");
+                };
+            });
+
             services
                 .AddMvc()
 
