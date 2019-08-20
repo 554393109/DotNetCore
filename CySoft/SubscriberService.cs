@@ -8,13 +8,13 @@ namespace CySoft
 {
     public interface ISubscriberService
     {
-        void CheckReceivedMessage(DateTime datetime);
+        Task CheckReceivedMessage(DateTime datetime);
     }
 
     public class SubscriberService : ISubscriberService, ICapSubscribe
     {
-        [CapSubscribe("xxx.services.show.time")]
-        public void CheckReceivedMessage(DateTime datetime)
+        [CapSubscribe("#.Order.UnifiedPay")]
+        public async Task CheckReceivedMessage(DateTime time)
         {
             var dt_now = DateTime.Now;
 
@@ -23,6 +23,7 @@ namespace CySoft
             //    Time = "{0:yyyy-MM-dd HH:mm:ss.fff}".ToFormat(dt_now),
             //    TimeSpan = dt_now.ToUnixTimestamp(TimestampAccuracy.Milliseconds),
             //});
+            await Console.Out.WriteLineAsync($@"{dt_now}, Subscriber invoked, Sent time:{time}");
         }
     }
 }

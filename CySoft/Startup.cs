@@ -28,7 +28,7 @@ namespace CySoft
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<AppDbContext>();
-            //services.AddTransient<ISubscriberService, SubscriberService>();
+            services.AddTransient<ISubscriberService, SubscriberService>();
             services.AddCap(x => {
                 x.UseEntityFramework<AppDbContext>();
                 //x.UseDashboard();
@@ -42,7 +42,13 @@ namespace CySoft
                 //    d.MatchPath = "cap";
                 //});
 
-                x.UseRabbitMQ("192.168.1.140");
+                x.UseRabbitMQ(options => {
+                    options.HostName = "192.168.1.140";
+                    options.Port = 5672;    // 5671
+                    options.VirtualHost = "cyesb";
+                    options.UserName = "cyesb";
+                    options.Password = "123";
+                });
                 x.UseDashboard();
                 x.FailedRetryCount = 5;
                 x.FailedThresholdCallback = (type, name, content) => {

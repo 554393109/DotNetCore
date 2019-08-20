@@ -54,7 +54,9 @@ namespace CySoft.Controllers
         {
             var dt_now = DateTime.Now;
             //_capBus.Publish("xxx.services.show.time", dt_now);
-            _capBus.PublishAsync("sample.rabbitmq.sqlserver", dt_now);
+            _capBus.PublishAsync("YZQ.Order.UnifiedPay", dt_now);
+            _capBus.PublishAsync("System_A.AuthNotify.OpenPlatform", dt_now);
+            _capBus.PublishAsync("System_B.AuthNotify.OpenPlatform", dt_now);
 
             return Ok(new {
                 UniqueID = Generate_19.Generate(),
@@ -65,10 +67,17 @@ namespace CySoft.Controllers
 
 
         [NonAction]
-        [CapSubscribe("#.rabbitmq.sqlserver")]
-        public void Subscriber(DateTime time)
+        //[CapSubscribe("#.Order.UnifiedPay")]
+        public async Task Order(DateTime time)
         {
-            Console.WriteLine($@"{DateTime.Now}, Subscriber invoked, Sent time:{time}");
+            await Console.Out.WriteLineAsync($@"{DateTime.Now}, Subscriber invoked, Sent time:{time}");
+        }
+
+        [NonAction]
+        [CapSubscribe("#.AuthNotify.OpenPlatform")]
+        public async Task AuthNotify(DateTime time)
+        {
+            await Console.Out.WriteLineAsync($@"{DateTime.Now}, Subscriber invoked, Sent time:{time}");
         }
 
         //[HttpGet, HttpPost]
