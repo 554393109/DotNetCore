@@ -1,22 +1,31 @@
 ﻿using System;
+
 using Newtonsoft.Json;
 
 namespace CySoft.Utility
 {
     public static class JSON
     {
-        /// <summary>
-        /// 将指定的 JSON 字符串转换为 T 类型的对象。
-        /// </summary>
-        /// <typeparam name="T">所生成对象的类型。</typeparam>
-        /// <param name="input">要进行反序列化的 JSON 字符串。</param>
-        /// <returns>反序列化的对象。</returns>
-        public static T Deserialize<T>(string input)
+        private static readonly JsonSerializerSettings defaultSettings = new JsonSerializerSettings
         {
+            DateFormatString = "yyyy-MM-dd HH:mm:ss.fff",           // 格式化DateTime
+            FloatFormatHandling = FloatFormatHandling.String,       // 格式化浮点型【防止溢出和转换为科学计数表达】，不能使用FloatFormatHandling.Symbol
+            FloatParseHandling = FloatParseHandling.Decimal,        // 格式化浮点型【防止溢出和转换为科学计数表达】
+            NullValueHandling = NullValueHandling.Include,          // null值处理
+        };
+
+        public static T Deserialize<T>(string input, string dateFormatString = "yyyy-MM-dd HH:mm:ss.fff")
+        {
+            var settings = new JsonSerializerSettings
+            {
+                DateFormatString = dateFormatString,                    // 格式化DateTime
+                FloatFormatHandling = FloatFormatHandling.String,       // 格式化浮点型【防止溢出和转换为科学计数表达】
+                FloatParseHandling = FloatParseHandling.Decimal,        // 格式化浮点型【防止溢出和转换为科学计数表达】
+            };
+
             try
             {
-                //return Serializer.Deserialize<T>(input);
-                return JsonConvert.DeserializeObject<T>(input);
+                return JsonConvert.DeserializeObject<T>(input, settings: settings);
             }
             catch (ArgumentNullException ex)
             {
@@ -44,61 +53,31 @@ namespace CySoft.Utility
             }
         }
 
-        /// <summary>
-        /// 将对象转换为 JSON 字符串。
-        /// </summary>
-        /// <param name="obj">要序列化的对象。</param>
-        /// <returns> 序列化的 JSON 字符串。</returns>
-        public static string Serialize(object obj)
+        public static string Serialize(object obj, int formatting = 0, bool ignoreNull = false, string dateFormatString = "yyyy-MM-dd HH:mm:ss.fff")
         {
-            //return Serializer.Serialize(obj);
-            //return JsonConvert.SerializeObject(obj, Formatting.None);
-            return JSON.Serialize(obj, formatting: 0);
+            var settings = new JsonSerializerSettings
+            {
+                DateFormatString = dateFormatString,                    // 格式化DateTime
+                FloatFormatHandling = FloatFormatHandling.String,       // 格式化浮点型【防止溢出和转换为科学计数表达】，不能使用FloatFormatHandling.Symbol
+                FloatParseHandling = FloatParseHandling.Decimal,        // 格式化浮点型【防止溢出和转换为科学计数表达】
+
+                // null值处理
+                NullValueHandling = ignoreNull ? NullValueHandling.Ignore : NullValueHandling.Include
+            };
+
+            return JSON.Serialize(obj, formatting: formatting, settings: settings);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="formatting">None = 0, Indented = 1</param>
-        /// <returns></returns>
-        public static string Serialize(object obj, int formatting)
+        public static string Serialize(object obj, int formatting, JsonSerializerSettings settings = null)
         {
             try
             {
-                //return Serializer.Serialize(obj);
-                return JsonConvert.SerializeObject(obj, formatting: (Newtonsoft.Json.Formatting)formatting);
-            }
-            catch (InvalidOperationException ex)
-            {
-                //TextLogHelper.WriterExceptionLog(ex);
-                // LogHelper.Error(ex);
-                throw ex;
-            }
-            catch (ArgumentException ex)
-            {
-                //TextLogHelper.WriterExceptionLog(ex);
-                // LogHelper.Error(ex);
-                throw ex;
-            }
-            catch (Exception ex)
-            {
-                //TextLogHelper.WriterExceptionLog(ex);
-                // LogHelper.Error(ex);
-                throw ex;
-            }
-        }
+                settings = settings ?? defaultSettings;
 
-        public static string Serialize(object obj, JsonSerializerSettings settings)
-        {
-            try
-            {
-                settings = settings ?? new JsonSerializerSettings() {
-                    NullValueHandling = NullValueHandling.Ignore,               // 忽略null
-                    DateFormatString = "yyyy-MM-dd HH:mm:ss.fff"                // 格式化DateTime
-                };
-
-                return JsonConvert.SerializeObject(obj, settings: settings);
+                return JsonConvert.SerializeObject(
+                    value: obj
+                    , formatting: (Newtonsoft.Json.Formatting)formatting
+                    , settings: settings);
             }
             catch (InvalidOperationException ex)
             {
@@ -128,7 +107,6 @@ namespace CySoft.Utility
             try
             {
                 return JSON.Deserialize<T>(JSON.Serialize(obj));
-                //return Serializer.ConvertToType<T>(obj);
             }
             catch (InvalidOperationException ex)
             {
